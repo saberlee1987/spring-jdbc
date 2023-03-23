@@ -152,21 +152,21 @@ create table cities
     name        nvarchar2(200) not null,
     status_code number(1)      not null,
     created_at  timestamp default current_timestamp,
-    updated_at  timestamp default current_timestamp,
-    deleted_at  timestamp default current_timestamp
+    updated_at  timestamp default null,
+    deleted_at  timestamp default null
 );
 
 create table users
 (
     id          number(12)     not null primary key,
     name        nvarchar2(200) not null,
-    username    nvarchar2(200) not null unique using index,
+    username    nvarchar2(200) not null unique ,
     password    varchar2(200)  not null,
-    city_id     number(12)     not null using index,
+    city_id     number(12)     not null ,
     status_code number(1)      not null,
     created_at  timestamp default current_timestamp,
-    updated_at  timestamp default current_timestamp,
-    deleted_at  timestamp default current_timestamp,
+    updated_at  timestamp default null,
+    deleted_at  timestamp default null,
     constraint user_city_id foreign key (city_id)
         references cities (id)
 );
@@ -176,8 +176,8 @@ create table groups
     name        nvarchar2(200) not null,
     status_code number(1)      not null,
     created_at  timestamp default current_timestamp,
-    updated_at  timestamp default current_timestamp,
-    deleted_at  timestamp default current_timestamp
+    updated_at  timestamp default null,
+    deleted_at  timestamp default null
 );
 
 create table permissions
@@ -186,14 +186,14 @@ create table permissions
     name        nvarchar2(200) not null,
     status_code number(1)      not null,
     created_at  timestamp default current_timestamp,
-    updated_at  timestamp default current_timestamp,
-    deleted_at  timestamp default current_timestamp
+    updated_at  timestamp default null,
+    deleted_at  timestamp default null
 );
 create table group_user
 (
     id         number(12) not null primary key,
-    user_id    number(12) not null using index,
-    group_id   number(12) not null using index,
+    user_id    number(12) not null ,
+    group_id   number(12) not null ,
     created_at timestamp default current_timestamp,
     constraint group_user_user_fk foreign key (user_id)
         references users (id),
@@ -204,8 +204,8 @@ create table group_user
 create table group_permission
 (
     id            number(12) not null primary key,
-    permission_id number(12) not null using index,
-    group_id      number(12) not null using index,
+    permission_id number(12) not null ,
+    group_id      number(12) not null ,
     created_at    timestamp default current_timestamp,
     constraint group_user_permission_fk foreign key (permission_id)
         references permissions (id),
@@ -216,11 +216,11 @@ create table group_permission
 create table orders
 (
     id          number(12) not null primary key,
-    user_id     int        not null using index,
+    user_id     int        not null ,
     status_code number(1)  not null,
     created_at  timestamp default current_timestamp,
-    updated_at  timestamp default current_timestamp,
-    deleted_at  timestamp default current_timestamp,
+    updated_at  timestamp default null,
+    deleted_at  timestamp default null,
     constraint order_user_user_fk foreign key (user_id)
         references users (id)
 );
@@ -231,18 +231,18 @@ create table products
     name        nvarchar2(200) not null,
     status_code number(1)      not null,
     created_at  timestamp default current_timestamp,
-    updated_at  timestamp default current_timestamp,
-    deleted_at  timestamp default current_timestamp
+    updated_at  timestamp default null,
+    deleted_at  timestamp default null
 );
 
 create table order_detail
 (
     id         number(12) not null primary key,
-    order_id   number(12) not null using index,
-    product_id number(12) not null using index,
+    order_id   number(12) not null ,
+    product_id number(12) not null ,
     created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp,
-    deleted_at timestamp default current_timestamp,
+    updated_at timestamp default null,
+    deleted_at timestamp default null,
     constraint order_detail_order_fk foreign key (order_id)
         references orders (id),
     constraint order_detail_product_fk foreign key (product_id)
