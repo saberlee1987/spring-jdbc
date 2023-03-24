@@ -65,18 +65,22 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        return null;
+        return namedParameterJdbcTemplate.query("select * from USERS",new UserRowMapper());
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        boolean result = false;
+        int affectedRow = namedParameterJdbcTemplate.update("delete from CITIES where ID=:id", new MapSqlParameterSource("id", id));
+        if (affectedRow>0)
+            result = true;
+        return result;
     }
 
     @Override
     public boolean checkExistById(Long id) {
         boolean result = false;
-        Integer count = namedParameterJdbcTemplate.queryForObject("select count(*) from users where id=:id", new MapSqlParameterSource("id", id), Integer.class);
+        Long count = namedParameterJdbcTemplate.queryForObject("select count(*) from users where id=:id", new MapSqlParameterSource("id", id), Long.class);
         if (count != null && count > 0) {
             result = true;
         }
@@ -86,7 +90,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean checkExistByUsername(String username) {
         boolean result = false;
-        Integer count = namedParameterJdbcTemplate.queryForObject("select count(*) from users where USERNAME=:username", new MapSqlParameterSource("username", username), Integer.class);
+        Long count = namedParameterJdbcTemplate.queryForObject("select count(*) from users where USERNAME=:username", new MapSqlParameterSource("username", username), Long.class);
         if (count != null && count > 0) {
             result = true;
         }

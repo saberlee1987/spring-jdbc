@@ -37,13 +37,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll() {
-        return null;
+        return userRepository.getAll();
     }
 
     @Override
     public boolean delete(Long id) {
         checkExistById(id);
-        return false;
+        return userRepository.delete(id);
     }
 
     @Override
@@ -67,6 +67,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByUsername(String username) {
         checkExistByUsername(username);
-        return null;
+        return userRepository.getByUsername(username);
     }
 }

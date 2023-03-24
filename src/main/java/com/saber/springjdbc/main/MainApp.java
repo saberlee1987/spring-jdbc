@@ -1,33 +1,33 @@
 package com.saber.springjdbc.main;
 
 import com.saber.springjdbc.config.AppConfig;
-import com.saber.springjdbc.entity.City;
 import com.saber.springjdbc.entity.User;
-import com.saber.springjdbc.services.CityService;
 import com.saber.springjdbc.services.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.util.List;
 
 public class MainApp {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         UserService userService = context.getBean(UserService.class);
-        CityService cityService = context.getBean(CityService.class);
-        User user = userService.get(7L);
-        Long cityId= user.getCity().getId();
-        City city = cityService.get(cityId);
-        user.setCity(city);
-
-        System.out.println(user);
-        user.setName("bruce");
-        user.setUsername("bruce40");
-        user.setPassword("AdminBruce40");
-        user =userService.update(user);
-        user.setUpdatedAt(Timestamp.from(Instant.now()));
-        System.out.println("user update ===> "+user);
+        List<User> users = userService.getAll();
+        System.out.println(users);
+//        CityService cityService = context.getBean(CityService.class);
+        //User user = userService.getByUsername("saber66");
+//        User user = userService.get(7L);
+//        Long cityId= user.getCity().getId();
+//        City city = cityService.get(cityId);
+//        user.setCity(city);
+//
+//        System.out.println(user);
+//        user.setName("bruce");
+//        user.setUsername("bruce40");
+//        user.setPassword("AdminBruce40");
+//        user =userService.update(user);
+//        user.setUpdatedAt(Timestamp.from(Instant.now()));
+//        System.out.println("user update ===> "+user);
 
 //
 //        City city = cityService.getByName("newTehran");

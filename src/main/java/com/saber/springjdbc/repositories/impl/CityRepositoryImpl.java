@@ -68,7 +68,7 @@ public class CityRepositoryImpl implements CityRepository {
     @Override
     public boolean checkExistById(Long id) {
         boolean result = false;
-        Integer count = jdbcTemplate.queryForObject("select count(*) from cities where id=?", Integer.class, id);
+        Long count = jdbcTemplate.queryForObject("select count(*) from cities where id=?", Long.class, id);
         if (count != null && count > 0)
             result = true;
 //        return jdbcTemplate.queryForObject("select count(*) from cities where id=?", new Object[]{id}, Integer.class) > 0;
@@ -79,7 +79,7 @@ public class CityRepositoryImpl implements CityRepository {
     @Override
     public boolean checkExistByName(String name) {
         boolean result = false;
-        Integer count = jdbcTemplate.queryForObject("select count(*) from cities where name=?", Integer.class, name);
+        Long count = jdbcTemplate.queryForObject("select count(*) from cities where name=?", Long.class, name);
         if (count != null && count > 0)
             result = true;
         return result;
