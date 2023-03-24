@@ -8,6 +8,9 @@ public interface CityService {
     City store(City city);
     City update(City city);
     City get(Long id);
+    City getByName(String name);
     List<City> getAll();
-    boolean delete(City city);
+    boolean delete(Long id);
+    boolean checkExistById(Long id);
+    boolean checkExistByName(String name);
 }

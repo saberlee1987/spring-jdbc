@@ -9,5 +9,8 @@ public interface CityRepository {
     City update(City city);
     City get(Long id);
     List<City> getAll();
-    boolean delete(City city);
+    boolean delete(Long id);
+    boolean checkExistById(Long id);
+    boolean checkExistByName(String name);
+    City getByName(String name);
 }

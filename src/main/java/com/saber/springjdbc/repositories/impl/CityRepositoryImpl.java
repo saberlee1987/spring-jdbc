@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -40,6 +41,9 @@ public class CityRepositoryImpl implements CityRepository {
 
     @Override
     public City update(City city) {
+        int update = jdbcTemplate.update("update CITIES set NAME=? , UPDATED_AT=? where ID=?", city.getName(), new Date(), city.getId());
+        if (update > 0)
+            return city;
         return null;
     }
 
@@ -53,12 +57,37 @@ public class CityRepositoryImpl implements CityRepository {
 
     @Override
     public List<City> getAll() {
-       return jdbcTemplate.query("select * from cities", this::getCity);
+        return jdbcTemplate.query("select * from cities", this::getCity);
     }
 
     @Override
-    public boolean delete(City city) {
-        return false;
+    public boolean delete(Long id) {
+        return jdbcTemplate.update("delete from CITIES where ID=?", id) > 0;
+    }
+
+    @Override
+    public boolean checkExistById(Long id) {
+        boolean result = false;
+        Integer count = jdbcTemplate.queryForObject("select count(*) from cities where id=?", Integer.class, id);
+        if (count != null && count > 0)
+            result = true;
+//        return jdbcTemplate.queryForObject("select count(*) from cities where id=?", new Object[]{id}, Integer.class) > 0;
+
+        return result;
+    }
+
+    @Override
+    public boolean checkExistByName(String name) {
+        boolean result = false;
+        Integer count = jdbcTemplate.queryForObject("select count(*) from cities where name=?", Integer.class, name);
+        if (count != null && count > 0)
+            result = true;
+        return result;
+    }
+
+    @Override
+    public City getByName(String name) {
+        return jdbcTemplate.queryForObject("select * from cities where name=?", this::getCity, name);
     }
 
     private City getCity(ResultSet resultSet, int rowNum) throws SQLException {
