@@ -53,3 +53,4 @@ build/
 *.tar.gz
 *.rar
 
+/.idea/
