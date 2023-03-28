@@ -13,12 +13,12 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-@Repository
-public class CityRepositoryImpl implements CityRepository {
+@Repository(value = "cityRepositoryOracleImpl")
+public class CityRepositoryOracleImpl implements CityRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public CityRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public CityRepositoryOracleImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

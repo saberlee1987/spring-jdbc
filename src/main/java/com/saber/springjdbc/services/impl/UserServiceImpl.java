@@ -4,6 +4,7 @@ import com.saber.springjdbc.common.exceptions.ResourceNotFoundException;
 import com.saber.springjdbc.entity.User;
 import com.saber.springjdbc.repositories.UserRepository;
 import com.saber.springjdbc.services.UserService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(@Qualifier(value = "userRepositoryMySqlImpl") UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

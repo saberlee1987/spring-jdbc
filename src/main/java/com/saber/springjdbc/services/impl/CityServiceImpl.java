@@ -4,6 +4,7 @@ import com.saber.springjdbc.common.exceptions.ResourceNotFoundException;
 import com.saber.springjdbc.entity.City;
 import com.saber.springjdbc.repositories.CityRepository;
 import com.saber.springjdbc.services.CityService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class CityServiceImpl implements CityService {
     private final CityRepository cityRepository;
 
-    public CityServiceImpl(CityRepository cityRepository) {
+    public CityServiceImpl(@Qualifier(value = "cityRepositoryMysqlImpl") CityRepository cityRepository) {
         this.cityRepository = cityRepository;
     }
 

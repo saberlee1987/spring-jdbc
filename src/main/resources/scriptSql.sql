@@ -207,9 +207,9 @@ create table group_permission
     permission_id number(12) not null ,
     group_id      number(12) not null ,
     created_at    timestamp default current_timestamp,
-    constraint group_user_permission_fk foreign key (permission_id)
+    constraint group_permission_permission_fk foreign key (permission_id)
         references permissions (id),
-    constraint group_user_group_fk foreign key (group_id)
+    constraint group_permission_group_fk foreign key (group_id)
         references groups (id)
 );
 

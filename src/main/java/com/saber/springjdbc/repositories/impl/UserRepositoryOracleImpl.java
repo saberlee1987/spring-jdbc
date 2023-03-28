@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public class UserRepositoryImpl implements UserRepository {
+@Repository(value = "userRepositoryOracleImpl")
+public class UserRepositoryOracleImpl implements UserRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public UserRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public UserRepositoryOracleImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
