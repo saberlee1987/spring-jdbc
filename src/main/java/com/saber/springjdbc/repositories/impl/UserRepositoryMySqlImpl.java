@@ -1,5 +1,6 @@
 package com.saber.springjdbc.repositories.impl;
 
+import com.saber.springjdbc.common.Constants;
 import com.saber.springjdbc.common.UserRowMapper;
 import com.saber.springjdbc.entity.User;
 import com.saber.springjdbc.repositories.UserRepository;
@@ -49,8 +50,9 @@ public class UserRepositoryMySqlImpl implements UserRepository {
         sqlParameterSource.addValue("username", user.getUsername());
         sqlParameterSource.addValue("password", user.getPassword());
         sqlParameterSource.addValue("cityId", user.getCity().getId());
+        sqlParameterSource.addValue("statusCode", Constants.StatusCode.ACTIVE.getValue());
         sqlParameterSource.addValue("updatedAt", user.getUpdatedAt());
-        int update = namedParameterJdbcTemplate.update("update users set NAME=:name , USERNAME=:username, PASSWORD=:password , CITY_ID=:cityId, UPDATED_AT=:updatedAt where ID=:id"
+        int update = namedParameterJdbcTemplate.update("update users set NAME=:name , USERNAME=:username, PASSWORD=:password , CITY_ID=:cityId, UPDATED_AT=:updatedAt where ID=:id and status_code=:statusCode"
                 , sqlParameterSource);
         if (update>0)
             return user;
@@ -59,19 +61,27 @@ public class UserRepositoryMySqlImpl implements UserRepository {
 
     @Override
     public User get(Long id) {
-        return namedParameterJdbcTemplate.queryForObject("select * from users where id=:id",
-                new MapSqlParameterSource("id", id), new UserRowMapper());
+        MapSqlParameterSource parameterSource =new MapSqlParameterSource();
+        parameterSource.addValue("statusCode", Constants.StatusCode.ACTIVE.getValue());
+        parameterSource.addValue("id",id);
+        return namedParameterJdbcTemplate.queryForObject("select * from users where id=:id and status_code=:statusCode",
+                parameterSource, new UserRowMapper());
     }
 
     @Override
     public List<User> getAll() {
-        return namedParameterJdbcTemplate.query("select * from USERS",new UserRowMapper());
+        MapSqlParameterSource parameterSource =new MapSqlParameterSource();
+        parameterSource.addValue("statusCode", Constants.StatusCode.ACTIVE.getValue());
+        return namedParameterJdbcTemplate.query("select * from USERS where status_code=:statusCode",parameterSource,new UserRowMapper());
     }
 
     @Override
     public boolean delete(Long id) {
+        MapSqlParameterSource parameterSource =new MapSqlParameterSource();
+        parameterSource.addValue("statusCode", Constants.StatusCode.ACTIVE.getValue());
+        parameterSource.addValue("id",id);
         boolean result = false;
-        int affectedRow = namedParameterJdbcTemplate.update("delete from CITIES where ID=:id", new MapSqlParameterSource("id", id));
+        int affectedRow = namedParameterJdbcTemplate.update("delete from CITIES where ID=:id and status_code=:statusCode", parameterSource);
         if (affectedRow>0)
             result = true;
         return result;
@@ -79,8 +89,11 @@ public class UserRepositoryMySqlImpl implements UserRepository {
 
     @Override
     public boolean checkExistById(Long id) {
+        MapSqlParameterSource parameterSource =new MapSqlParameterSource();
+        parameterSource.addValue("statusCode", Constants.StatusCode.ACTIVE.getValue());
+        parameterSource.addValue("id",id);
         boolean result = false;
-        Long count = namedParameterJdbcTemplate.queryForObject("select count(*) from users where id=:id", new MapSqlParameterSource("id", id), Long.class);
+        Long count = namedParameterJdbcTemplate.queryForObject("select count(*) from users where id=:id and status_code=:statusCode", parameterSource, Long.class);
         if (count != null && count > 0) {
             result = true;
         }
@@ -89,8 +102,11 @@ public class UserRepositoryMySqlImpl implements UserRepository {
 
     @Override
     public boolean checkExistByUsername(String username) {
+        MapSqlParameterSource parameterSource =new MapSqlParameterSource();
+        parameterSource.addValue("statusCode", Constants.StatusCode.ACTIVE.getValue());
+        parameterSource.addValue("username",username);
         boolean result = false;
-        Long count = namedParameterJdbcTemplate.queryForObject("select count(*) from users where USERNAME=:username", new MapSqlParameterSource("username", username), Long.class);
+        Long count = namedParameterJdbcTemplate.queryForObject("select count(*) from users where USERNAME=:username and status_code=:statusCode", parameterSource, Long.class);
         if (count != null && count > 0) {
             result = true;
         }
@@ -99,7 +115,10 @@ public class UserRepositoryMySqlImpl implements UserRepository {
 
     @Override
     public User getByUsername(String username) {
-        return namedParameterJdbcTemplate.queryForObject("select * from users where username=:username",
-                new MapSqlParameterSource("username", username), new UserRowMapper());
+        MapSqlParameterSource parameterSource =new MapSqlParameterSource();
+        parameterSource.addValue("statusCode", Constants.StatusCode.ACTIVE.getValue());
+        parameterSource.addValue("username",username);
+        return namedParameterJdbcTemplate.queryForObject("select * from users where username=:username and status_code=:statusCode",
+               parameterSource, new UserRowMapper());
     }
 }

@@ -1,5 +1,6 @@
 package com.saber.springjdbc.repositories.impl;
 
+import com.saber.springjdbc.common.Constants;
 import com.saber.springjdbc.entity.City;
 import com.saber.springjdbc.repositories.CityRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +44,8 @@ public class CityRepositoryMysqlImpl implements CityRepository {
 
     @Override
     public City update(City city) {
-        int update = jdbcTemplate.update("update CITIES set NAME=? , UPDATED_AT=? where ID=?", city.getName(), new Date(), city.getId());
+        int update = jdbcTemplate.update("update CITIES set NAME=? , UPDATED_AT=? where ID=? and status_code=?",
+                city.getName(), new Date(), city.getId(),Constants.StatusCode.ACTIVE.getValue());
         if (update > 0)
             return city;
         return null;
@@ -49,7 +53,7 @@ public class CityRepositoryMysqlImpl implements CityRepository {
 
     @Override
     public City get(Long id) {
-        List<City> cities = jdbcTemplate.query("select * from cities where id = ?", this::getCity, id);
+        List<City> cities = jdbcTemplate.query("select * from cities where id = ? and status_code=?", this::getCity, id,Constants.StatusCode.ACTIVE.getValue());
         if (cities.size() == 1)
             return cities.get(0);
         return null;
@@ -57,18 +61,18 @@ public class CityRepositoryMysqlImpl implements CityRepository {
 
     @Override
     public List<City> getAll() {
-        return jdbcTemplate.query("select * from cities", this::getCity);
+        return jdbcTemplate.query("select * from cities where status_code=?", this::getCity,Constants.StatusCode.ACTIVE.getValue());
     }
 
     @Override
     public boolean delete(Long id) {
-        return jdbcTemplate.update("delete from CITIES where ID=?", id) > 0;
+        return jdbcTemplate.update("update cities set status_code=? ,deleted_at=? where ID=? ", Constants.StatusCode.DE_ACTIVE.getValue(), Timestamp.from(Instant.now()),id) > 0;
     }
 
     @Override
     public boolean checkExistById(Long id) {
         boolean result = false;
-        Long count = jdbcTemplate.queryForObject("select count(*) from cities where id=?", Long.class, id);
+        Long count = jdbcTemplate.queryForObject("select count(*) from cities where id=? and status_code=?", Long.class, id,Constants.StatusCode.ACTIVE.getValue());
         if (count != null && count > 0)
             result = true;
 //        return jdbcTemplate.queryForObject("select count(*) from cities where id=?", new Object[]{id}, Integer.class) > 0;
@@ -79,7 +83,7 @@ public class CityRepositoryMysqlImpl implements CityRepository {
     @Override
     public boolean checkExistByName(String name) {
         boolean result = false;
-        Long count = jdbcTemplate.queryForObject("select count(*) from cities where name=?", Long.class, name);
+        Long count = jdbcTemplate.queryForObject("select count(*) from cities where name=? and status_code=?", Long.class, name,Constants.StatusCode.ACTIVE.getValue());
         if (count != null && count > 0)
             result = true;
         return result;
@@ -87,7 +91,7 @@ public class CityRepositoryMysqlImpl implements CityRepository {
 
     @Override
     public City getByName(String name) {
-        return jdbcTemplate.queryForObject("select * from cities where name=?", this::getCity, name);
+        return jdbcTemplate.queryForObject("select * from cities where name=? and status_code=?", this::getCity, name,Constants.StatusCode.ACTIVE.getValue());
     }
 
     private City getCity(ResultSet resultSet, int rowNum) throws SQLException {
