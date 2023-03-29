@@ -8,6 +8,7 @@ import java.util.List;
 @Repository
 public interface UserService  {
     User store(User user);
+    User storeByProcedure(User user);
     User update(User user);
     User get(Long id);
     List<User> getAll();

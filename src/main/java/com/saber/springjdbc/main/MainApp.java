@@ -1,28 +1,52 @@
 package com.saber.springjdbc.main;
 
+import com.saber.springjdbc.common.Constants;
 import com.saber.springjdbc.config.AppConfig;
+import com.saber.springjdbc.entity.City;
 import com.saber.springjdbc.entity.Group;
+import com.saber.springjdbc.entity.User;
+import com.saber.springjdbc.services.CityService;
 import com.saber.springjdbc.services.GroupService;
+import com.saber.springjdbc.services.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 
 public class MainApp {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
+        CityService cityService = context.getBean(CityService.class);
 
-        GroupService groupService = context.getBean(GroupService.class);
+        UserService userService = context.getBean(UserService.class);
 
-        Group group = groupService.get(1L);
-        System.out.println("group ===> "+group);
-        group.setName("group clt 1");
-        groupService.update(group);
-        group = groupService.get(1L);
-        System.out.println("group ===> "+group);
+        City newTehran = cityService.getByName("newTehran");
+        User user = new User();
+        user.setCity(newTehran);
+        user.setName("ali");
+        user.setUsername("ali77");
+        user.setPassword("AdminAli77");
+        user.setStatusCode(Constants.StatusCode.ACTIVE.getValue());
+        user.setCreatedAt(Timestamp.from(Instant.now()));
+        user.setUpdatedAt(Timestamp.from(Instant.now()));
+        user = userService.storeByProcedure(user);
 
-        groupService.delete(1L);
+        System.out.println("result procedure ===> " + user);
 
-        group = groupService.get(1L);
-        System.out.println("group ===> "+group);
+//        GroupService groupService = context.getBean(GroupService.class);
+//
+//        Group group = groupService.get(1L);
+//        System.out.println("group ===> "+group);
+//        group.setName("group clt 1");
+//        groupService.update(group);
+//        group = groupService.get(1L);
+//        System.out.println("group ===> "+group);
+//
+//        groupService.delete(1L);
+//
+//        group = groupService.get(1L);
+//        System.out.println("group ===> "+group);
 
 //        Group group = new Group();
 //        group.setName("group clt");
@@ -33,9 +57,6 @@ public class MainApp {
 //
 //        System.out.println("group ===> "+group);
 
-//        CityService cityService = context.getBean(CityService.class);
-
-//        UserService userService = context.getBean(UserService.class);
 //        List<User> users = userService.getAll();
 //        System.out.println(users);
         //User user = userService.getByUsername("saber66");

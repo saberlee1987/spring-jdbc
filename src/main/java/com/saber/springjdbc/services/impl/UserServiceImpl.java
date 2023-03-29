@@ -25,6 +25,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User storeByProcedure(User user) {
+        //return userRepository.storeByProcedure(user);
+//        return userRepository.storeByProcedure2(user);
+        return userRepository.storeByProcedure3(user);
+    }
+
+    @Override
     public User update(User user) {
         checkExistById(user.getId());
         return userRepository.update(user);

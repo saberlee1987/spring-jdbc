@@ -46,6 +46,21 @@ public class UserRepositoryOracleImpl implements UserRepository {
     }
 
     @Override
+    public User storeByProcedure(User user) {
+        return null;
+    }
+
+    @Override
+    public User storeByProcedure2(User user) {
+        return null;
+    }
+
+    @Override
+    public User storeByProcedure3(User user) {
+        return null;
+    }
+
+    @Override
     public User update(User user) {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource("name", user.getName());
         sqlParameterSource.addValue("id",user.getId());

@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface UserRepository {
     User store(User user);
+    User storeByProcedure(User user);
+    User storeByProcedure2(User user);
+    User storeByProcedure3(User user);
     User update(User user);
     User get(Long id);
     List<User> getAll();
